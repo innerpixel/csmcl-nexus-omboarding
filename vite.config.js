@@ -8,18 +8,14 @@ export default defineConfig({
   plugins: [
     vue(),
     VitePWA({
-      strategies: 'injectManifest',
-      srcDir: 'public',
-      filename: 'sw-push.js',
-      injectRegister: 'auto',
       registerType: 'autoUpdate',
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,json,vue,txt,woff2}']
       },
       manifest: {
-        name: 'CSMCL Nexus Onboarding',
-        short_name: 'Nexus',
-        description: 'CSMCL Nexus Onboarding Application',
+        name: 'Alien Transmissions PWA',
+        short_name: 'Alien PWA',
+        description: 'An alien-themed PWA with push notifications',
         theme_color: '#0a0a1f',
         background_color: '#0a0a1f',
         display: 'standalone',
