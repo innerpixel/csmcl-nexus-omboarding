@@ -1,28 +1,75 @@
-# 🛸 CSMCL Nexus Onboarding
+# 🛸 Alien Transmissions PWA
 
-A sci-fi themed Progressive Web App (PWA) built with Vue 3 + Vite, featuring alien-styled push notifications and a futuristic UI.
+A sci-fi themed Progressive Web App (PWA) that brings the excitement of alien communications to your browser! Built with Vue 3, Vite, and enhanced with push notifications, this app features a unique alien-themed interface and interactive notification system.
+
+[Live Demo](https://your-username.github.io/csmcl-nexus-omboarding/) | [Documentation](#documentation)
+
+![Alien Transmissions Screenshot](screenshot.png)
 
 ## ✨ Features
 
-- 👽 Alien-themed UI with glowing effects and animations
-- 🚀 Full PWA support with offline functionality
-- 📡 Push notifications with alien transmissions
-- 🎨 Custom sci-fi components and styling
-- 🌌 Space-themed dark mode design
+### 🔔 Advanced Notification System
+- **Multiple Notification Types**:
+  - 🚨 **Alerts**: High-priority messages for urgent situations
+  - 👽 **Messages**: Standard alien communications
+  - 🌟 **Discoveries**: Special announcements for new findings
 
-## 🛠️ Tech Stack
+- **Custom Message Management**:
+  - Create and manage your own alien messages
+  - Organize messages by category
+  - Random message selection
+  - Persistent storage using Pinia
 
-- Vue 3 with `<script setup>`
-- Vite for blazing fast development
-- Tailwind CSS for styling
-- Workbox for PWA capabilities
-- Web Push for notifications
+- **Scheduling System**:
+  - Schedule notifications for future delivery
+  - View and manage scheduled transmissions
+  - Cancel scheduled messages
+  - Real-time updates
+
+### 🎨 Alien-Themed UI
+- Futuristic design with glowing effects
+- Animated components
+- Responsive layout
+- Dark mode optimized
+- Custom sci-fi buttons and indicators
+
+### 🚀 PWA Features
+- Installable on desktop and mobile
+- Offline support
+- Push notifications
+- Automatic updates
+
+## 🛠️ Technology Stack
+
+- **Frontend**:
+  - Vue 3 with Composition API
+  - Vite for fast development
+  - Tailwind CSS for styling
+  - Pinia for state management
+
+- **PWA**:
+  - VitePWA plugin
+  - Service Workers
+  - Web Push API
+  - Workbox for caching
+
+- **Backend**:
+  - Express.js server
+  - Web Push for notifications
+  - VAPID key authentication
 
 ## 🚀 Getting Started
 
+### Prerequisites
+- Node.js 16+
+- npm or yarn
+- Modern browser with Push API support
+
+### Installation
+
 1. Clone the repository:
 ```bash
-git clone [your-repo-url]
+git clone https://github.com/your-username/csmcl-nexus-omboarding.git
 cd csmcl-nexus-omboarding
 ```
 
@@ -32,7 +79,7 @@ npm install
 ```
 
 3. Set up environment variables:
-Create a `.env` file with your VAPID keys (for push notifications):
+Create a `.env` file with your VAPID keys:
 ```env
 VITE_VAPID_PUBLIC_KEY=your_public_key
 VITE_VAPID_PRIVATE_KEY=your_private_key
@@ -50,37 +97,64 @@ npm install
 node server.js
 ```
 
-## 🏗️ Building for Production
+## 📱 Usage Guide
 
+### Setting Up Notifications
+
+1. Visit the app in your browser
+2. Click "REQUEST ACCESS" to enable notifications
+3. Allow notifications when prompted
+4. Test the connection with different notification types
+
+### Managing Custom Messages
+
+1. Navigate to the Message Control panel
+2. Select a message type (Alert, Message, Discovery)
+3. Click "Add Message" to create new messages
+4. Use the delete button to remove messages
+5. Messages are automatically saved and persisted
+
+### Scheduling Notifications
+
+1. Click "SCHEDULE TRANSMISSION"
+2. Select message type and content
+3. Choose delivery time
+4. View scheduled messages in the list
+5. Cancel if needed
+
+## 🔧 Configuration
+
+### VAPID Keys
+Generate your VAPID keys using the provided script:
 ```bash
-npm run build
+cd server
+node generate-vapid.js
 ```
 
-Preview the production build:
-```bash
-npm run preview
-```
+### Customizing Notification Sounds
+1. Add your sound files to `public/sounds/`
+2. Update the notification configurations in `server/server.js`
 
-## 📱 PWA Features
+## 🤝 Contributing
 
-- Installable on desktop and mobile devices
-- Works offline
-- Push notifications for alien transmissions
-- Automatic updates when new content is available
-
-## 🎨 UI Components
-
-- `AlienLogo`: Animated alien logo with glowing effects
-- `SciFiButton`: Futuristic button with hover animations
-- `AlienNotifications`: Push notification management with sci-fi styling
-- Space-themed background with star effect
-
-## 🔐 Security
-
-- VAPID keys for secure push notifications
-- Environment variables for sensitive data
-- Service worker for secure offline functionality
+1. Fork the repository
+2. Create your feature branch: `git checkout -b feature/AmazingFeature`
+3. Commit your changes: `git commit -m 'Add some AmazingFeature'`
+4. Push to the branch: `git push origin feature/AmazingFeature`
+5. Open a Pull Request
 
 ## 📄 License
 
-MIT License - feel free to use this project for your own alien communications!
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- Icons and sounds from [source]
+- Inspired by sci-fi and alien themes
+- Built with Vue.js and modern web technologies
+
+## 📞 Contact
+
+Your Name - [@your_twitter](https://twitter.com/your_twitter)
+
+Project Link: [https://github.com/your-username/csmcl-nexus-omboarding](https://github.com/your-username/csmcl-nexus-omboarding)

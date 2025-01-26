@@ -4,6 +4,7 @@ import vue from '@vitejs/plugin-vue'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: '/csmcl-nexus-omboarding/',
   plugins: [
     vue(), 
     VitePWA({
@@ -29,7 +30,8 @@ export default defineConfig({
         background_color: '#0a0a1f',
         display: 'standalone',
         orientation: 'portrait',
-        start_url: '/',
+        start_url: '/csmcl-nexus-omboarding/',
+        scope: '/csmcl-nexus-omboarding/',
         icons: [
           {
             src: 'pwa-64x64.png',

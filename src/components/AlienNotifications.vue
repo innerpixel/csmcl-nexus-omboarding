@@ -1,7 +1,9 @@
 <script setup>
 import { ref, onMounted } from 'vue';
+import { useAlienMessagesStore } from '../stores/alienMessages';
 import SciFiButton from './SciFiButton.vue';
 
+const store = useAlienMessagesStore();
 const notificationStatus = ref('checking');
 const subscription = ref(null);
 const scheduledNotifications = ref([]);
@@ -86,12 +88,7 @@ const requestNotificationPermission = async () => {
 // Test notification functions for different types
 const sendTestNotification = async (type = 'MESSAGE') => {
   try {
-    const messages = {
-      ALERT: 'Urgent: Unknown object detected in sector 7G!',
-      MESSAGE: 'Greetings, Earthling! Your notification system is operational.',
-      DISCOVERY: 'New alien artifacts discovered in the vicinity!'
-    };
-
+    const message = store.getRandomMessage(type);
     const response = await fetch('http://localhost:3000/broadcast', {
       method: 'POST',
       headers: {
@@ -99,7 +96,7 @@ const sendTestNotification = async (type = 'MESSAGE') => {
       },
       body: JSON.stringify({
         type,
-        message: messages[type],
+        message,
         data: {
           testData: true,
           timestamp: Date.now()
@@ -108,23 +105,40 @@ const sendTestNotification = async (type = 'MESSAGE') => {
     });
     const result = await response.json();
     console.log('Broadcast result:', result);
+    
+    // Add to notification history
+    store.addToHistory({
+      type,
+      message,
+      success: true
+    });
   } catch (error) {
     console.error('Error sending test notification:', error);
+    store.addToHistory({
+      type,
+      message: 'Error sending notification',
+      success: false,
+      error: error.message
+    });
   }
 };
 
 // Schedule a notification
 const scheduleNotification = async () => {
   try {
+    const type = 'DISCOVERY';
+    const message = store.getRandomMessage(type);
+    const scheduledTime = new Date(Date.now() + 60000).toISOString(); // 1 minute from now
+
     const response = await fetch('http://localhost:3000/schedule', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        type: 'DISCOVERY',
-        message: 'Scheduled alien transmission received!',
-        scheduledTime: new Date(Date.now() + 60000).toISOString(), // 1 minute from now
+        type,
+        message,
+        scheduledTime,
         data: {
           scheduled: true,
           timestamp: Date.now()
@@ -133,6 +147,15 @@ const scheduleNotification = async () => {
     });
     const result = await response.json();
     console.log('Schedule result:', result);
+    
+    // Add to scheduled messages
+    store.addScheduledMessage({
+      type,
+      message,
+      scheduledTime,
+      id: result.id
+    });
+    
     await loadScheduledNotifications();
   } catch (error) {
     console.error('Error scheduling notification:', error);

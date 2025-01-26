@@ -3,6 +3,7 @@ import AlienLogo from './components/AlienLogo.vue'
 import SciFiButton from './components/SciFiButton.vue'
 import PWABadge from './components/PWABadge.vue'
 import AlienNotifications from './components/AlienNotifications.vue'
+import AlienMessageManager from './components/AlienMessageManager.vue'
 </script>
 
 <template>
@@ -35,6 +36,12 @@ import AlienNotifications from './components/AlienNotifications.vue'
         <div class="p-6 bg-space-800/50 rounded-lg backdrop-blur-sm border border-alien-500/20">
           <h2 class="text-xl font-mono text-alien-500 mb-4">Alien Transmissions</h2>
           <AlienNotifications />
+        </div>
+        
+        <!-- Message Manager Section -->
+        <div class="p-6 bg-space-800/50 rounded-lg backdrop-blur-sm border border-alien-500/20">
+          <h2 class="text-xl font-mono text-alien-500 mb-4">Message Control</h2>
+          <AlienMessageManager />
         </div>
       </div>
 
