@@ -6,21 +6,15 @@ import vue from '@vitejs/plugin-vue'
 export default defineConfig({
   base: process.env.NODE_ENV === 'production' ? '/csmcl-nexus-omboarding/' : '/',
   plugins: [
-    vue(), 
+    vue(),
     VitePWA({
       strategies: 'injectManifest',
       srcDir: 'public',
       filename: 'sw-push.js',
       injectRegister: 'auto',
       registerType: 'autoUpdate',
-      injectManifest: {
-        injectionPoint: 'self.__WB_MANIFEST',
-        swSrc: 'public/sw-push.js',
-        swDest: 'dist/sw-push.js',
-        globDirectory: 'dist',
-        globPatterns: [
-          '**/*.{html,js,css,png,jpg,svg,ico}'
-        ],
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,json,vue,txt,woff2}']
       },
       manifest: {
         name: 'CSMCL Nexus Onboarding',
@@ -30,8 +24,8 @@ export default defineConfig({
         background_color: '#0a0a1f',
         display: 'standalone',
         orientation: 'portrait',
-        start_url: '/csmcl-nexus-omboarding/',
-        scope: '/csmcl-nexus-omboarding/',
+        start_url: process.env.NODE_ENV === 'production' ? '/csmcl-nexus-omboarding/' : '/',
+        scope: process.env.NODE_ENV === 'production' ? '/csmcl-nexus-omboarding/' : '/',
         icons: [
           {
             src: 'pwa-64x64.png',
@@ -55,11 +49,6 @@ export default defineConfig({
             purpose: 'maskable'
           }
         ]
-      },
-      devOptions: {
-        enabled: true,
-        type: 'module',
-        navigateFallback: 'index.html'
       }
     })
   ]
