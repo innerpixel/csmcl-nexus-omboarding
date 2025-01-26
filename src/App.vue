@@ -1,56 +1,58 @@
-<script setup>
-import AlienLogo from './components/AlienLogo.vue'
-import SciFiButton from './components/SciFiButton.vue'
-import PWABadge from './components/PWABadge.vue'
-import AlienNotifications from './components/AlienNotifications.vue'
-import AlienMessageManager from './components/AlienMessageManager.vue'
-</script>
-
 <template>
-  <div class="min-h-screen bg-space-900 text-white flex flex-col items-center justify-center p-4">
-    <!-- Background effect -->
-    <div class="fixed inset-0 bg-[radial-gradient(ellipse_at_center,rgba(99,102,241,0.15),transparent_70%)]"></div>
-    
-    <!-- Stars effect -->
-    <div class="fixed inset-0" aria-hidden="true">
-      <div class="absolute inset-0 bg-space-900" 
-           style="background-image: radial-gradient(white 1px, transparent 1px); background-size: 50px 50px; opacity: 0.2;"></div>
-    </div>
-
-    <!-- Content -->
-    <div class="relative z-10 text-center max-w-md w-full">
-      <AlienLogo />
-      
-      <h1 class="mt-8 text-4xl md:text-6xl font-bold bg-gradient-to-r from-alien-500 to-alien-600 text-transparent bg-clip-text animate-glow">
-        NEXUS PORTAL
-      </h1>
-      
-      <p class="mt-4 text-lg md:text-xl text-gray-400 font-mono max-w-md mx-auto">
-        Welcome to the future of onboarding
-      </p>
-      
-      <div class="mt-12 space-y-8">
-        <SciFiButton text="ENTER PORTAL" />
-        
-        <!-- Notification Section -->
-        <div class="p-6 bg-space-800/50 rounded-lg backdrop-blur-sm border border-alien-500/20">
-          <h2 class="text-xl font-mono text-alien-500 mb-4">Alien Transmissions</h2>
-          <AlienNotifications />
+  <main class="min-h-screen bg-space-950 text-gray-100">
+    <!-- Main Container with responsive padding -->
+    <div class="p-4 sm:p-6 md:p-8 lg:p-12 xl:p-16">
+      <!-- Content wrapper with max-width constraints -->
+      <div class="mx-auto max-w-[95%] md:max-w-4xl lg:max-w-6xl xl:max-w-7xl">
+        <!-- Header with Logo -->
+        <div class="flex justify-center mb-8 sm:mb-12">
+          <AlienLogo class="w-32 sm:w-40 md:w-48 lg:w-56 xl:w-64" />
         </div>
-        
-        <!-- Message Manager Section -->
-        <div class="p-6 bg-space-800/50 rounded-lg backdrop-blur-sm border border-alien-500/20">
-          <h2 class="text-xl font-mono text-alien-500 mb-4">Message Control</h2>
-          <AlienMessageManager />
-        </div>
-      </div>
 
-      <div class="mt-8">
-        <PWABadge />
+        <!-- Main Content Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8 lg:gap-12">
+          <!-- Left Column -->
+          <div class="space-y-4 sm:space-y-6 md:space-y-8">
+            <div class="p-4 sm:p-6 md:p-8 bg-space-800/50 rounded-lg backdrop-blur-sm border border-alien-500/20">
+              <h2 class="text-xl sm:text-2xl md:text-3xl font-mono text-glow-400 mb-4 sm:mb-6">Galactic Map</h2>
+              <StarMap class="h-[250px] sm:h-[300px] md:h-[400px] lg:h-[500px]" />
+            </div>
+
+            <div class="p-4 sm:p-6 md:p-8 bg-space-800/50 rounded-lg backdrop-blur-sm border border-alien-500/20">
+              <h2 class="text-xl sm:text-2xl md:text-3xl font-mono text-glow-400 mb-4 sm:mb-6">Alien Transmissions</h2>
+              <AlienNotifications />
+            </div>
+          </div>
+
+          <!-- Right Column -->
+          <div class="space-y-4 sm:space-y-6 md:space-y-8">
+            <div class="p-4 sm:p-6 md:p-8 bg-space-800/50 rounded-lg backdrop-blur-sm border border-alien-500/20">
+              <h2 class="text-xl sm:text-2xl md:text-3xl font-mono text-glow-400 mb-4 sm:mb-6">Message Control</h2>
+              <AlienMessageManager />
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="mt-8 sm:mt-12 md:mt-16 text-center text-sm sm:text-base text-alien-400/60">
+          <p>Monitoring {{ stars.length }} star systems for alien activity</p>
+        </footer>
       </div>
     </div>
-  </div>
+  </main>
 </template>
+
+<script setup>
+import { ref } from 'vue';
+import AlienLogo from './components/AlienLogo.vue';
+import AlienNotifications from './components/AlienNotifications.vue';
+import AlienMessageManager from './components/AlienMessageManager.vue';
+import StarMap from './components/StarMap.vue';
+import PWABadge from './components/PWABadge.vue';
+import SciFiButton from './components/SciFiButton.vue';
+
+const stars = ref(Array.from({ length: Math.floor(Math.random() * 1000) + 500 }));
+</script>
 
 <style>
 @keyframes glow {
@@ -60,5 +62,9 @@ import AlienMessageManager from './components/AlienMessageManager.vue'
   to {
     text-shadow: 0 0 30px rgba(139,92,246,0.8);
   }
+}
+
+.text-glow-400 {
+  text-shadow: 0 0 10px rgba(74, 222, 128, 0.5);
 }
 </style>

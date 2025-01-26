@@ -1,160 +1,93 @@
 # 🛸 Alien Transmissions PWA
 
-A sci-fi themed Progressive Web App (PWA) that brings the excitement of alien communications to your browser! Built with Vue 3, Vite, and enhanced with push notifications, this app features a unique alien-themed interface and interactive notification system.
-
-[Live Demo](https://your-username.github.io/csmcl-nexus-omboarding/) | [Documentation](#documentation)
-
-![Alien Transmissions Screenshot](screenshot.png)
+A cutting-edge Progressive Web App for monitoring extraterrestrial communications and galactic activity.
 
 ## ✨ Features
 
-### 🔔 Advanced Notification System
-- **Multiple Notification Types**:
-  - 🚨 **Alerts**: High-priority messages for urgent situations
-  - 👽 **Messages**: Standard alien communications
-  - 🌟 **Discoveries**: Special announcements for new findings
+### 🌌 Interactive Galactic Map
+- Real-time star system visualization
+- Dynamic constellations with alien activity detection
+- Interactive star creation and exploration
+- Responsive design that adapts to your viewport
+- Hover effects and animated transitions
 
-- **Custom Message Management**:
-  - Create and manage your own alien messages
-  - Organize messages by category
-  - Random message selection
-  - Persistent storage using Pinia
+### 🔔 Advanced Notifications
+- Custom notification types (ALERT, MESSAGE, DISCOVERY)
+- Scheduled notifications
+- Interactive notification actions
+- Custom alien sound effects
 
-- **Scheduling System**:
-  - Schedule notifications for future delivery
-  - View and manage scheduled transmissions
-  - Cancel scheduled messages
-  - Real-time updates
+### 💫 Responsive Design
+- **Mobile (sm)**: Optimized for handheld devices
+- **Tablet (md)**: Enhanced interface with larger elements
+- **Desktop (lg)**: Two-column layout with advanced features
+- **Wide Screen (xl)**: Maximized viewing area with premium experience
 
-### 🎨 Alien-Themed UI
-- Futuristic design with glowing effects
-- Animated components
-- Responsive layout
-- Dark mode optimized
-- Custom sci-fi buttons and indicators
+### 🎨 UI Features
+- Sci-fi inspired design language
+- Animated transitions and effects
+- Dynamic star field background
+- Alien activity indicators
+- Responsive typography and spacing
 
-### 🚀 PWA Features
-- Installable on desktop and mobile
-- Offline support
-- Push notifications
-- Automatic updates
+## 🚀 Live Demo
+Visit the live demo at: https://innerpixel.github.io/csmcl-nexus-omboarding/
 
 ## 🛠️ Technology Stack
+- Vue 3 with Composition API
+- Vite for lightning-fast builds
+- TailwindCSS for responsive styling
+- PWA capabilities
+- Push Notifications API
+- GitHub Actions for CI/CD
 
-- **Frontend**:
-  - Vue 3 with Composition API
-  - Vite for fast development
-  - Tailwind CSS for styling
-  - Pinia for state management
+## 📱 PWA Features
+- Installable on mobile devices
+- Offline functionality
+- Push notifications
+- Custom app icon
+- Splash screen
 
-- **PWA**:
-  - VitePWA plugin
-  - Service Workers
-  - Web Push API
-  - Workbox for caching
-
-- **Backend**:
-  - Express.js server
-  - Web Push for notifications
-  - VAPID key authentication
-
-## 🚀 Getting Started
+## 🔧 Development
 
 ### Prerequisites
-- Node.js 16+
-- npm or yarn
-- Modern browser with Push API support
+```bash
+node >= 18
+npm >= 8
+```
 
 ### Installation
-
-1. Clone the repository:
 ```bash
-git clone https://github.com/your-username/csmcl-nexus-omboarding.git
-cd csmcl-nexus-omboarding
-```
-
-2. Install dependencies:
-```bash
+# Install dependencies
 npm install
-```
 
-3. Set up environment variables:
-Create a `.env` file with your VAPID keys:
-```env
-VITE_VAPID_PUBLIC_KEY=your_public_key
-VITE_VAPID_PRIVATE_KEY=your_private_key
-```
-
-4. Start the development server:
-```bash
+# Start development server
 npm run dev
+
+# Build for production
+npm run build
 ```
 
-5. Start the notification server:
-```bash
-cd server
-npm install
-node server.js
+### Environment Variables
+Create a `.env` file with:
+```
+VITE_VAPID_PUBLIC_KEY=your_public_key
 ```
 
-## 📱 Usage Guide
+## 🌟 Recent Updates
 
-### Setting Up Notifications
+### v1.1.0 - Galactic Expansion
+- Added interactive star map with real-time updates
+- Implemented responsive design across all screen sizes
+- Enhanced visual effects and animations
+- Improved notification system with alien activity detection
+- Optimized performance for mobile devices
 
-1. Visit the app in your browser
-2. Click "REQUEST ACCESS" to enable notifications
-3. Allow notifications when prompted
-4. Test the connection with different notification types
-
-### Managing Custom Messages
-
-1. Navigate to the Message Control panel
-2. Select a message type (Alert, Message, Discovery)
-3. Click "Add Message" to create new messages
-4. Use the delete button to remove messages
-5. Messages are automatically saved and persisted
-
-### Scheduling Notifications
-
-1. Click "SCHEDULE TRANSMISSION"
-2. Select message type and content
-3. Choose delivery time
-4. View scheduled messages in the list
-5. Cancel if needed
-
-## 🔧 Configuration
-
-### VAPID Keys
-Generate your VAPID keys using the provided script:
-```bash
-cd server
-node generate-vapid.js
-```
-
-### Customizing Notification Sounds
-1. Add your sound files to `public/sounds/`
-2. Update the notification configurations in `server/server.js`
+## 📜 License
+MIT
 
 ## 🤝 Contributing
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-1. Fork the repository
-2. Create your feature branch: `git checkout -b feature/AmazingFeature`
-3. Commit your changes: `git commit -m 'Add some AmazingFeature'`
-4. Push to the branch: `git push origin feature/AmazingFeature`
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- Icons and sounds from [source]
-- Inspired by sci-fi and alien themes
-- Built with Vue.js and modern web technologies
-
-## 📞 Contact
-
-Your Name - [@your_twitter](https://twitter.com/your_twitter)
-
-Project Link: [https://github.com/your-username/csmcl-nexus-omboarding](https://github.com/your-username/csmcl-nexus-omboarding)
+---
+Made with 💫 by Team Nexus
