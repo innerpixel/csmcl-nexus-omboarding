@@ -4,6 +4,7 @@ import SciFiButton from './SciFiButton.vue';
 
 const notificationStatus = ref('checking');
 const subscription = ref(null);
+const scheduledNotifications = ref([]);
 
 const VAPID_PUBLIC_KEY = 'BMv4vhQZ19oEQLrfmiixraMUpD27OeJ9LeiHtRZ-AyskMyBAZGxtekl4KpEgdGT_3a__zpR5iOxNfJNZLLtGn9M';
 
@@ -82,16 +83,27 @@ const requestNotificationPermission = async () => {
   }
 };
 
-// Test notification function
-const sendTestNotification = async () => {
+// Test notification functions for different types
+const sendTestNotification = async (type = 'MESSAGE') => {
   try {
+    const messages = {
+      ALERT: 'Urgent: Unknown object detected in sector 7G!',
+      MESSAGE: 'Greetings, Earthling! Your notification system is operational.',
+      DISCOVERY: 'New alien artifacts discovered in the vicinity!'
+    };
+
     const response = await fetch('http://localhost:3000/broadcast', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        message: '👽 Greetings, Earthling! Your notification system is operational.'
+        type,
+        message: messages[type],
+        data: {
+          testData: true,
+          timestamp: Date.now()
+        }
       })
     });
     const result = await response.json();
@@ -101,8 +113,58 @@ const sendTestNotification = async () => {
   }
 };
 
+// Schedule a notification
+const scheduleNotification = async () => {
+  try {
+    const response = await fetch('http://localhost:3000/schedule', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        type: 'DISCOVERY',
+        message: 'Scheduled alien transmission received!',
+        scheduledTime: new Date(Date.now() + 60000).toISOString(), // 1 minute from now
+        data: {
+          scheduled: true,
+          timestamp: Date.now()
+        }
+      })
+    });
+    const result = await response.json();
+    console.log('Schedule result:', result);
+    await loadScheduledNotifications();
+  } catch (error) {
+    console.error('Error scheduling notification:', error);
+  }
+};
+
+// Load scheduled notifications
+const loadScheduledNotifications = async () => {
+  try {
+    const response = await fetch('http://localhost:3000/schedule');
+    const result = await response.json();
+    scheduledNotifications.value = result.notifications;
+  } catch (error) {
+    console.error('Error loading scheduled notifications:', error);
+  }
+};
+
+// Cancel a scheduled notification
+const cancelScheduledNotification = async (id) => {
+  try {
+    await fetch(`http://localhost:3000/schedule/${id}`, {
+      method: 'DELETE'
+    });
+    await loadScheduledNotifications();
+  } catch (error) {
+    console.error('Error canceling scheduled notification:', error);
+  }
+};
+
 onMounted(() => {
   checkNotificationPermission();
+  loadScheduledNotifications();
 });
 </script>
 
@@ -144,11 +206,54 @@ onMounted(() => {
         text="REQUEST ACCESS" 
         @click="requestNotificationPermission" 
       />
-      <SciFiButton 
-        v-if="notificationStatus === 'granted'"
-        text="TEST TRANSMISSION" 
-        @click="sendTestNotification" 
-      />
+      
+      <!-- Test Notification Buttons -->
+      <div v-if="notificationStatus === 'granted'" class="space-y-2">
+        <SciFiButton 
+          text="🚨 SEND ALERT" 
+          @click="() => sendTestNotification('ALERT')"
+          class="bg-red-900/50 hover:bg-red-800/50"
+        />
+        <SciFiButton 
+          text="👽 SEND MESSAGE" 
+          @click="() => sendTestNotification('MESSAGE')"
+        />
+        <SciFiButton 
+          text="🌟 SEND DISCOVERY" 
+          @click="() => sendTestNotification('DISCOVERY')"
+          class="bg-purple-900/50 hover:bg-purple-800/50"
+        />
+        <SciFiButton 
+          text="⏰ SCHEDULE TRANSMISSION" 
+          @click="scheduleNotification"
+          class="bg-blue-900/50 hover:bg-blue-800/50"
+        />
+      </div>
+    </div>
+
+    <!-- Scheduled Notifications -->
+    <div v-if="scheduledNotifications.length > 0" class="mt-6">
+      <h3 class="text-glow-400 font-mono mb-2">Scheduled Transmissions:</h3>
+      <div class="space-y-2">
+        <div v-for="notification in scheduledNotifications" 
+             :key="notification.id" 
+             class="relative p-3 bg-space-900 rounded border border-alien-500/20">
+          <div class="flex justify-between items-center">
+            <div>
+              <span class="text-sm font-mono text-gray-300">
+                {{ new Date(notification.scheduledTime).toLocaleString() }}
+              </span>
+              <p class="text-sm text-gray-400">{{ notification.message }}</p>
+            </div>
+            <button 
+              @click="() => cancelScheduledNotification(notification.id)"
+              class="text-red-500 hover:text-red-400 transition-colors"
+            >
+              ❌
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
