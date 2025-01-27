@@ -91,6 +91,13 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // Skip dev server requests
+  if (event.request.url.includes('localhost:5173') || 
+      event.request.url.includes('@vite') ||
+      event.request.url.includes('vite-plugin-pwa')) {
+    return;
+  }
+
   // Handle API requests
   if (event.request.url.includes('/api/')) {
     event.respondWith(

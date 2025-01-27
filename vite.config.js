@@ -18,6 +18,11 @@ export default defineConfig({
     hmr: {
       host: 'localhost',
       protocol: 'ws'
+    },
+    port: 5173,
+    strictPort: true,
+    headers: {
+      'Service-Worker-Allowed': '/'
     }
   },
   plugins: [
@@ -27,7 +32,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       devOptions: {
         enabled: true,
-        type: 'module'
+        type: 'module',
+        navigateFallback: 'index.html'
       },
       injectManifest: {
         swSrc: 'public/service-worker.js',
