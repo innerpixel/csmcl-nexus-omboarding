@@ -14,7 +14,6 @@ export default defineConfig({
   plugins: [
     vue(),
     VitePWA({
-      strategies: 'injectManifest',
       injectRegister: 'auto',
       registerType: 'autoUpdate',
       devOptions: {
