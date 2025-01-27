@@ -22,7 +22,7 @@ export default defineConfig({
         type: 'module'
       },
       injectManifest: {
-        swSrc: './public/service-worker.js',
+        swSrc: 'public/service-worker.js',
         swDest: 'dist/service-worker.js',
         injectionPoint: 'self.__WB_MANIFEST'
       },
