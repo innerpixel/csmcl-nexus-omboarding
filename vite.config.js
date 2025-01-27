@@ -15,13 +15,16 @@ export default defineConfig({
     vue(),
     VitePWA({
       strategies: 'injectManifest',
-      srcDir: 'public',
-      filename: 'service-worker.js',
       injectRegister: 'auto',
       registerType: 'autoUpdate',
       devOptions: {
         enabled: true,
         type: 'module'
+      },
+      injectManifest: {
+        swSrc: './public/service-worker.js',
+        swDest: 'dist/service-worker.js',
+        injectionPoint: 'self.__WB_MANIFEST'
       },
       workbox: {
         cleanupOutdatedCaches: true,
