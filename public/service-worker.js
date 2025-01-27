@@ -14,10 +14,14 @@ const BASE_URL = '/csmcl-nexus-omboarding';
 const APP_SHELL_RESOURCES = [
   `${BASE_URL}/`,
   `${BASE_URL}/index.html`,
-  `${BASE_URL}/src/main.js`,
-  `${BASE_URL}/src/style.css`,
+  `${BASE_URL}/assets/index.js`,
+  `${BASE_URL}/assets/style.css`,
   `${BASE_URL}/manifest.json`,
   `${BASE_URL}/favicon.ico`,
+  `${BASE_URL}/favicon.svg`,
+  `${BASE_URL}/apple-touch-icon-180x180.png`,
+  `${BASE_URL}/pwa-192x192.png`,
+  `${BASE_URL}/pwa-512x512.png`
 ];
 
 // Security headers for fetch requests
