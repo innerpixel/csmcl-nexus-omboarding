@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useAlienMessagesStore } from '../stores/alienMessages';
+import { getApiUrl } from '../config';
 import SciFiButton from './SciFiButton.vue';
 
 const store = useAlienMessagesStore();
@@ -59,7 +60,7 @@ const subscribeToNotifications = async () => {
     subscription.value = newSubscription;
     
     // Send subscription to server
-    await fetch('http://localhost:3000/subscribe', {
+    await fetch(getApiUrl('/subscribe'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -89,7 +90,7 @@ const requestNotificationPermission = async () => {
 const sendTestNotification = async (type = 'MESSAGE') => {
   try {
     const message = store.getRandomMessage(type);
-    const response = await fetch('http://localhost:3000/broadcast', {
+    const response = await fetch(getApiUrl('/broadcast'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -130,7 +131,7 @@ const scheduleNotification = async () => {
     const message = store.getRandomMessage(type);
     const scheduledTime = new Date(Date.now() + 60000).toISOString(); // 1 minute from now
 
-    const response = await fetch('http://localhost:3000/schedule', {
+    const response = await fetch(getApiUrl('/schedule'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -165,7 +166,7 @@ const scheduleNotification = async () => {
 // Load scheduled notifications
 const loadScheduledNotifications = async () => {
   try {
-    const response = await fetch('http://localhost:3000/schedule');
+    const response = await fetch(getApiUrl('/schedule'));
     const result = await response.json();
     scheduledNotifications.value = result.notifications;
   } catch (error) {
@@ -176,7 +177,7 @@ const loadScheduledNotifications = async () => {
 // Cancel a scheduled notification
 const cancelScheduledNotification = async (id) => {
   try {
-    await fetch(`http://localhost:3000/schedule/${id}`, {
+    await fetch(getApiUrl(`/schedule/${id}`), {
       method: 'DELETE'
     });
     await loadScheduledNotifications();
