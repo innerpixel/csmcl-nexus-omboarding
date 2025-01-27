@@ -26,7 +26,22 @@ const APP_SHELL_RESOURCES = [
 
 // Security headers for fetch requests
 const securityHeaders = {
-  'Content-Security-Policy': "default-src 'self'; connect-src 'self' https://innerpixel.github.io https://api.your-production-domain.com http://localhost:3000; img-src 'self' data: https:; media-src 'self' https:; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;",
+  'Content-Security-Policy': `
+    default-src 'self';
+    script-src 'self' 'wasm-unsafe-eval' 'unsafe-inline';
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+    font-src 'self' https://fonts.gstatic.com;
+    img-src 'self' data: blob:;
+    media-src 'self';
+    connect-src 'self' http://localhost:* https://innerpixel.github.io ws://localhost:* wss://localhost:*;
+    worker-src 'self';
+    manifest-src 'self';
+    base-uri 'self';
+    form-action 'self';
+    frame-ancestors 'none';
+    object-src 'none';
+    upgrade-insecure-requests;
+  `,
   'X-Content-Type-Options': 'nosniff',
   'X-Frame-Options': 'DENY',
   'Referrer-Policy': 'strict-origin-when-cross-origin'
