@@ -26,7 +26,7 @@ const APP_SHELL_RESOURCES = [
 
 // Security headers for fetch requests
 const securityHeaders = {
-  'Content-Security-Policy': "default-src 'self'; img-src 'self' data: https:; media-src 'self' https:;",
+  'Content-Security-Policy': "default-src 'self'; connect-src 'self' https://innerpixel.github.io https://api.your-production-domain.com http://localhost:3000; img-src 'self' data: https:; media-src 'self' https:; script-src 'self' 'unsafe-inline' 'unsafe-eval';",
   'X-Content-Type-Options': 'nosniff',
   'X-Frame-Options': 'DENY',
   'Referrer-Policy': 'strict-origin-when-cross-origin'
