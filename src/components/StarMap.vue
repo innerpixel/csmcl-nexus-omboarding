@@ -13,11 +13,11 @@
         left: `${star.x}%`,
         top: `${star.y}%`,
         transform: `scale(${star.size * (isLargeScreen ? 1.5 : 1)})`,
-        opacity: star.opacity
+        opacity: star.baseOpacity
       }"
-      class="absolute w-1 h-1 bg-white rounded-full transition-all duration-1000"
+      class="absolute w-1 h-1 bg-white rounded-full transition-transform duration-300"
       :class="{
-        'animate-pulse': star.pulsing,
+        'star-pulse': star.pulsing,
         'bg-alien-400': star.alien,
         'sm:w-1.5 sm:h-1.5 md:w-2 md:h-2': star.size > 0.8
       }"
@@ -30,8 +30,8 @@
         v-for="constellation in constellations" 
         :key="constellation.id"
         :d="getConstellationPath(constellation.stars)"
+        class="stroke-alien-500/30 md:stroke-2 transition-all duration-300"
         :class="{
-          'stroke-alien-500/30 md:stroke-2': true,
           'hover:stroke-alien-400/50': isLargeScreen
         }"
         fill="none"
@@ -64,7 +64,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, onBeforeUnmount } from 'vue';
 import { useAlienMessagesStore } from '../stores/alienMessages';
 
 const store = useAlienMessagesStore();
@@ -73,48 +73,59 @@ const hoveredStar = ref(null);
 const alienActivity = ref(false);
 const isLargeScreen = ref(window.innerWidth >= 768);
 
-// Update isLargeScreen on window resize
-onMounted(() => {
-  window.addEventListener('resize', () => {
+// Resize handler with debounce
+let resizeTimeout;
+const handleResize = () => {
+  clearTimeout(resizeTimeout);
+  resizeTimeout = setTimeout(() => {
     isLargeScreen.value = window.innerWidth >= 768;
-  });
+  }, 250);
+};
+
+// Lifecycle hooks for event listeners
+onMounted(() => {
+  window.addEventListener('resize', handleResize);
 });
 
-// Generate more stars for larger screens
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', handleResize);
+  clearTimeout(resizeTimeout);
+});
+
+// Generate stars with stable properties
 const baseStarCount = computed(() => isLargeScreen.value ? 75 : 50);
 
-// Generate random stars
-const stars = ref(Array.from({ length: baseStarCount.value }, (_, i) => ({
-  id: i,
-  x: Math.random() * 100,
-  y: Math.random() * 100,
-  size: Math.random() * 0.5 + 0.5,
-  opacity: Math.random() * 0.5 + 0.5,
-  pulsing: Math.random() > 0.8,
-  alien: Math.random() > 0.95,
-  name: `Star System ${String.fromCharCode(65 + Math.floor(Math.random() * 26))}-${Math.floor(Math.random() * 999)}`
-})));
+const generateStars = () => {
+  return Array.from({ length: baseStarCount.value }, (_, i) => {
+    const size = Math.random() * 0.5 + 0.5;
+    return {
+      id: i,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      size,
+      baseOpacity: Math.random() * 0.3 + 0.7, // Higher base opacity
+      pulsing: Math.random() > 0.8,
+      alien: Math.random() > 0.95,
+      name: `Star System ${String.fromCharCode(65 + Math.floor(Math.random() * 26))}-${Math.floor(Math.random() * 999)}`
+    };
+  });
+};
+
+const stars = ref(generateStars());
 
 // Generate constellations
 const constellations = computed(() => {
   const result = [];
+  const starCount = Math.min(5, Math.floor(stars.value.length * 0.2));
+  
   for (let i = 0; i < 3; i++) {
     const constellationStars = [];
-    const startStar = stars.value[Math.floor(Math.random() * stars.value.length)];
-    constellationStars.push(startStar);
-    
-    for (let j = 0; j < 3; j++) {
-      const lastStar = constellationStars[constellationStars.length - 1];
-      const nearbyStars = stars.value.filter(s => 
-        s !== lastStar && 
-        Math.abs(s.x - lastStar.x) < 20 && 
-        Math.abs(s.y - lastStar.y) < 20
-      );
-      if (nearbyStars.length) {
-        constellationStars.push(nearbyStars[0]);
+    for (let j = 0; j < starCount; j++) {
+      const randomStar = stars.value[Math.floor(Math.random() * stars.value.length)];
+      if (!constellationStars.includes(randomStar)) {
+        constellationStars.push(randomStar);
       }
     }
-    
     result.push({
       id: i,
       stars: constellationStars
@@ -125,83 +136,89 @@ const constellations = computed(() => {
 
 // Get SVG path for constellation
 const getConstellationPath = (stars) => {
-  return stars.map((star, i) => 
-    `${i === 0 ? 'M' : 'L'} ${star.x} ${star.y}`
-  ).join(' ');
+  if (!stars.length) return '';
+  return stars.reduce((path, star, i) => {
+    return `${path}${i === 0 ? 'M' : 'L'}${star.x} ${star.y}`;
+  }, '');
 };
 
-// Handle star interaction
+// Handle star interaction with debounce
+let highlightTimeout;
 const highlightStar = (star) => {
-  hoveredStar.value = star;
-  if (star.alien) {
-    alienActivity.value = true;
-    setTimeout(() => {
-      alienActivity.value = false;
-    }, 3000);
-    
-    // Trigger alien notification
-    store.addToHistory({
-      type: 'DISCOVERY',
-      message: `Alien activity detected in ${star.name}!`,
-      timestamp: Date.now()
-    });
-  }
+  clearTimeout(highlightTimeout);
+  highlightTimeout = setTimeout(() => {
+    hoveredStar.value = star;
+    if (star.alien) {
+      alienActivity.value = true;
+      setTimeout(() => {
+        alienActivity.value = false;
+      }, 3000);
+    }
+  }, 50);
 };
 
-// Handle mouse movement
+// Handle mouse movement with throttle
+let lastMove = 0;
 const handleMouseMove = (e) => {
+  const now = Date.now();
+  if (now - lastMove < 50) return; // 50ms throttle
+  lastMove = now;
+
+  if (!starMap.value) return;
   const rect = starMap.value.getBoundingClientRect();
   const x = ((e.clientX - rect.left) / rect.width) * 100;
   const y = ((e.clientY - rect.top) / rect.height) * 100;
-  
-  // Make nearby stars pulse
+
   stars.value.forEach(star => {
-    const distance = Math.sqrt(
-      Math.pow(star.x - x, 2) + 
-      Math.pow(star.y - y, 2)
-    );
+    const dx = x - star.x;
+    const dy = y - star.y;
+    const distance = Math.sqrt(dx * dx + dy * dy);
     if (distance < 10) {
-      star.opacity = 1;
-      star.pulsing = true;
+      star.size = Math.min(1.5, 1 + (10 - distance) / 10);
     } else {
-      star.opacity = star.opacity * 0.95 + 0.5 * 0.05;
-      star.pulsing = false;
+      star.size = 1;
     }
   });
 };
 
-// Handle star click
-const handleStarClick = async (e) => {
-  const rect = starMap.value.getBoundingClientRect();
-  const x = ((e.clientX - rect.left) / rect.width) * 100;
-  const y = ((e.clientY - rect.top) / rect.height) * 100;
-  
-  // Find clicked star
-  const clickedStar = stars.value.find(star => 
-    Math.abs(star.x - x) < 5 && 
-    Math.abs(star.y - y) < 5
-  );
-  
-  if (clickedStar) {
-    // Add new star near clicked star
-    const newStar = {
-      id: stars.value.length,
-      x: clickedStar.x + (Math.random() - 0.5) * 10,
-      y: clickedStar.y + (Math.random() - 0.5) * 10,
-      size: Math.random() * 0.5 + 0.5,
-      opacity: 1,
-      pulsing: true,
-      alien: Math.random() > 0.8,
-      name: `Star System ${String.fromCharCode(65 + Math.floor(Math.random() * 26))}-${Math.floor(Math.random() * 999)}`
-    };
-    stars.value.push(newStar);
+// Handle star click with debounce
+let clickTimeout;
+const handleStarClick = (e) => {
+  if (clickTimeout) return;
+  clickTimeout = setTimeout(() => {
+    clickTimeout = null;
     
-    // Trigger notification
-    store.addToHistory({
-      type: 'MESSAGE',
-      message: `New star system discovered near ${clickedStar.name}!`,
-      timestamp: Date.now()
+    if (!starMap.value) return;
+    const rect = starMap.value.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+
+    const clickedStar = stars.value.find(star => {
+      const dx = x - star.x;
+      const dy = y - star.y;
+      return Math.sqrt(dx * dx + dy * dy) < 5;
     });
-  }
+
+    if (clickedStar?.alien) {
+      store.addAlienMessage({
+        id: Date.now(),
+        timestamp: new Date(),
+        system: clickedStar.name,
+        message: `Signal detected from ${clickedStar.name}...`,
+        type: 'discovery'
+      });
+    }
+  }, 300);
 };
 </script>
+
+<style scoped>
+.star-pulse {
+  animation: starPulse 2s ease-in-out infinite;
+}
+
+@keyframes starPulse {
+  0%, 100% { opacity: var(--base-opacity, 0.7); }
+  50% { opacity: 0.3; }
+}
+</style>
