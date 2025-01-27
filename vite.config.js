@@ -1,62 +1,51 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { VitePWA } from 'vite-plugin-pwa'
+import { fileURLToPath, URL } from 'node:url'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: process.env.NODE_ENV === 'production' ? '/csmcl-nexus-omboarding/' : '/',
-  build: {
-    outDir: 'dist',
-    assetsDir: 'assets',
-    rollupOptions: {
-      output: {
-        manualChunks: undefined
-      }
+  base: '/',
+  resolve: {
+    alias: {
+      '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   },
+  build: {
+    outDir: 'dist',
+    assetsDir: 'assets'
+  },
   server: {
-    hmr: {
-      host: 'localhost',
-      protocol: 'ws'
-    },
     port: 5173,
     strictPort: true,
     headers: {
-      'Service-Worker-Allowed': '/'
+      'Content-Security-Policy': [
+        `default-src 'self'`,
+        `script-src 'self' 'unsafe-inline' 'unsafe-eval'`,
+        `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com`,
+        `font-src 'self' https://fonts.gstatic.com`,
+        `img-src 'self' data: blob:`,
+        `connect-src 'self' ws://localhost:5173 http://localhost:5173`,
+        `worker-src 'self'`,
+        `manifest-src 'self'`
+      ].join('; ')
     }
   },
   plugins: [
     vue(),
     VitePWA({
-      injectRegister: 'auto',
       registerType: 'autoUpdate',
       devOptions: {
         enabled: true,
-        type: 'module',
-        navigateFallback: 'index.html'
+        type: 'module'
       },
-      injectManifest: {
-        swSrc: 'public/service-worker.js',
-        swDest: 'dist/service-worker.js',
-        injectionPoint: 'self.__WB_MANIFEST'
-      },
-      workbox: {
-        cleanupOutdatedCaches: true,
-        skipWaiting: true,
-        clientsClaim: true,
-        navigateFallback: 'index.html',
-        navigateFallbackDenylist: [/^\/api\//],
-      },
-      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
       manifest: {
         name: 'Alien Transmissions',
-        short_name: 'AlienTx',
-        description: 'Monitor extraterrestrial communications and galactic activity',
-        theme_color: '#1a1a2e',
-        background_color: '#1a1a2e',
+        short_name: 'Alien Transmissions',
+        theme_color: '#0a0a1f',
+        start_url: '/',
         display: 'standalone',
-        start_url: '/csmcl-nexus-omboarding/',
-        scope: '/csmcl-nexus-omboarding/',
+        background_color: '#0a0a1f',
         icons: [
           {
             src: 'pwa-192x192.png',
@@ -70,6 +59,13 @@ export default defineConfig({
             purpose: 'any maskable'
           }
         ]
+      },
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+        cleanupOutdatedCaches: true,
+        clientsClaim: true,
+        skipWaiting: true,
+        navigateFallback: 'index.html'
       }
     })
   ]
