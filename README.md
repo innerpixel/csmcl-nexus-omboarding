@@ -42,11 +42,61 @@ Visit the live demo at: https://innerpixel.github.io/csmcl-nexus-omboarding/
 - GitHub Actions for CI/CD
 
 ## 📱 PWA Features
+Currently Implemented:
 - Installable on mobile devices
 - Offline functionality
 - Push notifications
 - Custom app icon
 - Splash screen
+
+Available PWA Capabilities:
+1. 🔄 Offline & Storage
+   - Complete offline functionality
+   - Resource caching via Service Workers
+   - Local data storage (IndexedDB/Cache API)
+   - Background sync capabilities
+
+2. 📱 Device Integration
+   - Camera and microphone access
+   - Geolocation services
+   - Bluetooth connectivity
+   - USB device access
+   - NFC capabilities
+   - Device vibration
+
+3. 💾 Advanced Storage
+   - File system access
+   - Large file handling
+   - Persistent storage
+   - Background syncing
+
+4. 🎯 App-like Experience
+   - Home screen installation
+   - Standalone window mode
+   - Custom splash screens
+   - Deep linking
+   - Inter-app sharing
+
+5. ⚡ Performance Features
+   - App shell architecture
+   - Background processing
+   - Smart resource loading
+   - Responsive design
+
+6. 🔌 Hardware Access
+   - Motion sensors
+   - Light sensors
+   - Battery status
+   - Network information
+   - Media capabilities
+
+7. 🔒 Security & Updates
+   - HTTPS security
+   - Silent background updates
+   - Version management
+   - Real-time sync
+
+These capabilities can be progressively implemented to enhance the app's functionality.
 
 ## 🔧 Development
 

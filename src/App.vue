@@ -40,6 +40,7 @@
       </div>
     </div>
   </main>
+  <UpdateNotification />
 </template>
 
 <script setup>
@@ -50,6 +51,7 @@ import AlienMessageManager from './components/AlienMessageManager.vue';
 import StarMap from './components/StarMap.vue';
 import PWABadge from './components/PWABadge.vue';
 import SciFiButton from './components/SciFiButton.vue';
+import UpdateNotification from './components/UpdateNotification.vue';
 
 const stars = ref(Array.from({ length: Math.floor(Math.random() * 1000) + 500 }));
 </script>
